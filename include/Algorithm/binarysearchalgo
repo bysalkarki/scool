@@ -1,0 +1,51 @@
+<?php
+
+include 'quickSortAlgo.php';
+
+function binarySearchAlgo($result, string $column, $target)
+{
+    $arrays = [];
+
+    if ($result) {
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $arrays[] = $row;
+            }
+        } else {
+            echo "No data found!";
+            exit;
+        }
+
+       
+        quickSort($arrays, 0, count($arrays) - 1, $column);
+
+        
+        return binarySearch($arrays, $target, 0, count($arrays) - 1, $column);
+    } else {
+        return null;
+    }
+}
+
+
+function binarySearch(array $arr, $target, int $low, int $high, string $column)
+{
+    if ($high >= $low) {
+        $mid = $low + (int)(($high - $low) / 2);
+
+        // Compare target with the middle element
+        if (strcmp($arr[$mid][$column], $target) === 0) {
+            return $mid; 
+        }
+
+      
+        if (strcmp($arr[$mid][$column], $target) > 0) {
+            return binarySearch($arr, $target, $low, $mid - 1, $column);
+        }
+
+     
+        return binarySearch($arr, $target, $mid + 1, $high, $column);
+    }
+
+   
+    return -1;
+}
